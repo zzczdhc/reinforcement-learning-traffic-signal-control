@@ -209,8 +209,11 @@ def build_env_kwargs(
         "arrival_schedule": arrival_schedule,
         "episode_length": int(environment_config.get("episode_length", 200)),
         "step_seconds": int(environment_config.get("step_seconds", 3)),
+        "min_green_time": int(environment_config.get("min_green_time", 2)),
         "yellow_time": int(environment_config.get("yellow_time", 1)),
         "max_departures_per_step": int(environment_config.get("max_departures_per_step", 4)),
+        "recent_arrival_window": int(environment_config.get("recent_arrival_window", 5)),
         "reward_mode": environment_config.get("reward_mode", "queue"),
         "switch_penalty": float(environment_config.get("switch_penalty", 2.0)),
+        "observation_variant": environment_config.get("observation_variant", "full"),
     }

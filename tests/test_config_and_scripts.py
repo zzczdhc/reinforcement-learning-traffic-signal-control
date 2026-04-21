@@ -19,8 +19,11 @@ SMOKE_CONFIG = """
 environment:
   episode_length: 12
   step_seconds: 3
+  min_green_time: 2
   yellow_time: 1
   max_departures_per_step: 3
+  recent_arrival_window: 5
+  observation_variant: full
   reward_mode: queue
   switch_penalty: 1.0
   train_schedule:
@@ -149,6 +152,96 @@ class ConfigAndScriptSmokeTest(unittest.TestCase):
         self.assertIn("dqn", payload["evaluation_results"]["symmetric"])
         self.assertIn("Saved checkpoint", train_result.stdout)
         self.assertIn("DQN summary", render_result.stdout)
+
+    def test_run_ablation_script_and_plotter(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpdir_path = Path(tmpdir)
+            base_config_path = tmpdir_path / "base_config.yaml"
+            ablation_config_path = tmpdir_path / "ablations.yaml"
+            output_root = tmpdir_path / "ablation_results"
+            figure_dir = tmpdir_path / "figures"
+            base_config_path.write_text(SMOKE_CONFIG, encoding="utf-8")
+            ablation_config_path.write_text(
+                f"""
+base_config: {base_config_path}
+global_defaults:
+  output_root: {output_root}
+  seeds: [5]
+studies:
+  reward_design:
+    variants:
+      queue_reward:
+        overrides:
+          environment:
+            reward_mode: queue
+      waiting_reward:
+        overrides:
+          environment:
+            reward_mode: waiting
+  state_representation:
+    variants:
+      minimal_state:
+        overrides:
+          environment:
+            observation_variant: minimal
+      full_state:
+        overrides:
+          environment:
+            observation_variant: full
+  switch_penalty:
+    variants:
+      penalty_0:
+        overrides:
+          environment:
+            switch_penalty: 0.0
+      penalty_1:
+        overrides:
+          environment:
+            switch_penalty: 1.0
+""".strip(),
+                encoding="utf-8",
+            )
+
+            ablation_result = subprocess.run(
+                [
+                    sys.executable,
+                    str(PROJECT_ROOT / "scripts" / "run_ablations.py"),
+                    "--config",
+                    str(ablation_config_path),
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+
+            summary_path = output_root / "ablation_summary.json"
+            plot_result = subprocess.run(
+                [
+                    sys.executable,
+                    str(PROJECT_ROOT / "scripts" / "plot_ablations.py"),
+                    str(summary_path),
+                    "--output-dir",
+                    str(figure_dir),
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+
+            payload = json.loads(summary_path.read_text(encoding="utf-8"))
+            summary_exists = summary_path.exists()
+            queue_plot_exists = (figure_dir / "baseline_vs_dqn_avg_queue.png").exists()
+            penalty_plot_exists = (figure_dir / "switch_penalty_invalid_switch.png").exists()
+
+        self.assertTrue(summary_exists)
+        self.assertIn("reward_design", payload["studies"])
+        self.assertIn("minimal_state", payload["studies"]["state_representation"]["variants"])
+        self.assertTrue(queue_plot_exists)
+        self.assertTrue(penalty_plot_exists)
+        self.assertIn("Saved ablation summary", ablation_result.stdout)
+        self.assertIn("Saved figures", plot_result.stdout)
 
 
 if __name__ == "__main__":

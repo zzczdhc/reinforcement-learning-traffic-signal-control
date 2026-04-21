@@ -1,8 +1,11 @@
 environment:
   episode_length: 200
   step_seconds: 3
+  min_green_time: 2
   yellow_time: 1
   max_departures_per_step: 4
+  recent_arrival_window: 5
+  observation_variant: full
   reward_mode: queue
   switch_penalty: 2.0
   train_schedule:

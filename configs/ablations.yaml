@@ -1,0 +1,50 @@
+base_config: configs/default.yaml
+
+global_defaults:
+  output_root: results/ablations
+  seeds: [7, 17, 27]
+
+studies:
+  reward_design:
+    description: Compare queue-based and waiting-based reward shaping.
+    variants:
+      queue_reward:
+        overrides:
+          environment:
+            reward_mode: queue
+      waiting_reward:
+        overrides:
+          environment:
+            reward_mode: waiting
+
+  state_representation:
+    description: Compare a compact observation against the full 13D state.
+    variants:
+      minimal_state:
+        overrides:
+          environment:
+            observation_variant: minimal
+      full_state:
+        overrides:
+          environment:
+            observation_variant: full
+
+  switch_penalty:
+    description: Measure how switch costs affect policy aggressiveness.
+    variants:
+      penalty_0:
+        overrides:
+          environment:
+            switch_penalty: 0.0
+      penalty_1:
+        overrides:
+          environment:
+            switch_penalty: 1.0
+      penalty_2:
+        overrides:
+          environment:
+            switch_penalty: 2.0
+      penalty_4:
+        overrides:
+          environment:
+            switch_penalty: 4.0

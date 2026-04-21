@@ -69,7 +69,8 @@ def main() -> None:
                 f"avg_queue={format_metric(summary['average_queue_length'])} | "
                 f"avg_wait_s={format_metric(summary['average_wait_time_seconds'])} | "
                 f"throughput={format_metric(summary['throughput_per_step'])} | "
-                f"switches={format_metric(summary['switch_count'])}"
+                f"switches={format_metric(summary['switch_count'])} | "
+                f"invalid={format_metric(summary['invalid_switch_count'])}"
             )
         print()
 
