@@ -1,0 +1,6 @@
+regime,first_variant,second_variant,first_wait,second_wait,wait_improvement_pct,first_queue,second_queue,queue_improvement_pct,mask_off_invalid,mask_on_invalid
+symmetric_low,Mask off,Mask on,7.398562,7.287255,1.5044,4.893667,4.820417,1.4968,68.883333,0.0
+symmetric_high,Mask off,Mask on,10.004978,9.976451,0.2851,15.744917,15.694417,0.3207,33.716667,0.0
+asymmetric,Mask off,Mask on,8.084158,8.063465,0.256,10.10175,10.086,0.1559,48.416667,0.0
+nonstationary,Mask off,Mask on,8.338719,8.226043,1.3512,7.963917,7.85775,1.3331,56.433333,0.0
+burst_east_west,Mask off,Mask on,8.283663,8.247377,0.438,8.885167,8.84225,0.483,57.183333,0.0

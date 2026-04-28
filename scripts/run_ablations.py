@@ -44,6 +44,12 @@ def main() -> None:
         default="configs/ablations.yaml",
         help="Path to the ablation study config.",
     )
+    parser.add_argument(
+        "--output-root",
+        type=str,
+        default=None,
+        help="Override the output_root configured in the ablation YAML.",
+    )
     args = parser.parse_args()
 
     ablation_config_path = resolve_project_path(args.config)
@@ -53,7 +59,8 @@ def main() -> None:
 
     global_defaults = dict(ablation_config.get("global_defaults", {}))
     default_seeds = [int(seed) for seed in global_defaults.get("seeds", [7, 17, 27])]
-    output_root = resolve_project_path(global_defaults.get("output_root", "results/ablations"))
+    output_root_setting = args.output_root or global_defaults.get("output_root", "results/ablations")
+    output_root = resolve_project_path(output_root_setting)
     output_root.mkdir(parents=True, exist_ok=True)
 
     summary: dict[str, Any] = {
@@ -113,7 +120,9 @@ def main() -> None:
                     f"train={payload['metadata']['train_schedule_name']} "
                     f"obs={payload['metadata']['observation_variant']} "
                     f"reward={payload['metadata']['reward_mode']} "
-                    f"switch_penalty={payload['metadata']['switch_penalty']}"
+                    f"switch_penalty={payload['metadata']['switch_penalty']} "
+                    f"double_dqn={payload['metadata'].get('double_dqn')} "
+                    f"action_mask={payload['metadata'].get('use_action_mask')}"
                 )
 
             study_summary["variants"][variant_name] = {

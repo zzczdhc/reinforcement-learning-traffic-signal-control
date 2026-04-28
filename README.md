@@ -12,7 +12,7 @@ Implemented now:
 - three heuristic baselines: fixed-cycle, queue-threshold, max-pressure
 - DQN training loop with replay buffer, target network, legal-action masking, Double DQN targets, and seeded runs
 - multi-seed DQN experiment aggregation with mean/std reporting
-- ablation runner for reward, state, switch-penalty, and generalization studies
+- ablation runner for Double DQN and action masking studies
 - CLI config overrides for quick DQN experiments
 - lightweight hyperparameter search for both `1x1` and `2x2` setups
 - automatic figure generation for both single DQN runs and tuning results
@@ -97,7 +97,7 @@ The simulator includes:
 - minimum-green constraints
 - yellow-time switch loss with a pending next phase
 - explicit invalid switch request metrics
-- configurable `observation_variant` for ablations:
+- configurable `observation_variant`:
   - `full`: current 13D observation
   - `minimal`: 6D observation with queues, phase, and phase duration
 - queue-based or waiting-based reward shaping
@@ -143,6 +143,12 @@ Train and evaluate DQN:
 python3 scripts/train_dqn.py --config configs/default.yaml
 python3 scripts/summarize_results.py results/dqn_summary.json
 ```
+
+The default `1x1` config uses the tuned non-architecture Double DQN setting from
+`results/best_nonarch_tuned_config.yaml`: `learning_rate=0.00025`,
+`batch_size=32`, `gamma=0.95`, `end_epsilon=0.08`,
+`epsilon_decay_steps=30000`, `warmup_steps=800`, `target_sync_steps=50`,
+`switch_penalty=2.5`, and `gradient_clip_norm=10.0`.
 
 Run a multi-seed DQN experiment without replacing the single-seed summary:
 
@@ -200,8 +206,13 @@ Run the ablation suite and generate figures:
 
 ```bash
 python3 scripts/run_ablations.py --config configs/ablations.yaml
-python3 scripts/plot_ablations.py results/ablations/ablation_summary.json
+python3 scripts/build_final_assets.py --results-root results/final_clean
 ```
+
+The ablation suite compares vanilla DQN vs Double DQN and legal-action masking
+on vs off. In separate reward-design experiments, queue-based and waiting-based
+reward modes gave very similar results; the report uses queue mode for the final
+model because it is simple and directly aligned with congestion reduction.
 
 ## Tuning Workflow
 
@@ -223,16 +234,20 @@ Main tuning artifacts:
 
 Main generated artifacts:
 
-- `results/baseline_summary.json`
-- `results/dqn_summary.json`
-- `results/dqn_multiseed_summary.json`
-- `results/checkpoints/dqn_policy.pt`
-- `results/multiseed/seed_*/dqn_summary.json`
-- `results/ablations/ablation_summary.json`
-- `results/tuning/tuning_summary.json`
-- `results/plots/dqn/*.png`
-- `results/plots/tuning/*.png`
-- `results/figures/*.png`
+- `results/final_clean/baselines/baseline_summary.json`
+- `results/final_clean/final_double_dqn/dqn_multiseed_summary.json`
+- `results/final_clean/original_double_dqn/dqn_multiseed_summary.json`
+- `results/final_clean/ablations/ablation_summary.json`
+- `results/final_clean/grid_2x2/baselines/baseline_summary.json`
+- `results/final_clean/grid_2x2/dqn_multiseed_summary.json`
+- `results/final_clean/figures/*.png`
+- `results/final_clean/figures/*.pdf`
+- `results/final_clean/tables/*.csv`
+- `results/final_clean/final_statistics.md`
+
+The 2x2 grid extension is trained with Double DQN and action masking enabled.
+Its presentation figures are `fig08_2x2_wait_rl_vs_baselines` and
+`fig09_2x2_queue_rl_vs_baselines` under `results/final_clean/figures/`.
 
 Reported metrics:
 
@@ -267,7 +282,6 @@ Older checkpoints from the previous 10D observation version are not compatible w
 
 ## Recommended Next Steps
 
-1. Run the baselines and DQN pipeline once end to end.
-2. Run `scripts/run_ablations.py` to generate seeded reward/state/switch-penalty/generalization studies.
-3. Run `scripts/tune_dqn.py --profile 1x1`, then `scripts/tune_dqn.py --profile 2x2` to narrow DQN hyperparameters.
-4. Use the saved JSON outputs and generated figures directly in the report or slides.
+1. Use `results/final_clean/final_statistics.md` for the final numerical summary.
+2. Use `results/final_clean/figures/` for presentation-ready figures.
+3. Treat the `2x2` simulator as future work or an extension, not the main reported result.

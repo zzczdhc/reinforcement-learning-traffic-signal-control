@@ -38,18 +38,21 @@ def set_global_seeds(seed: int) -> None:
         torch.backends.cudnn.deterministic = True
 
 
-def make_masked_dqn_policy(agent: Any):
-    """Wrap the agent with environment-aware action masking for evaluation."""
+def make_dqn_policy(agent: Any, use_action_mask: bool = True):
+    """Wrap the agent as an evaluation policy, optionally applying action masks."""
 
     def policy(observation: np.ndarray, info: Mapping[str, Any] | None = None) -> int:
-        return agent.act(
-            observation,
-            epsilon=0.0,
-            action_mask=build_action_mask(
+        action_mask = None
+        if use_action_mask:
+            action_mask = build_action_mask(
                 observation,
                 info=info,
                 action_dim=agent.action_dim,
-            ),
+            )
+        return agent.act(
+            observation,
+            epsilon=0.0,
+            action_mask=action_mask,
         )
 
     return policy
@@ -83,6 +86,7 @@ def train_and_evaluate_dqn(
         None if gradient_clip_raw is None else float(gradient_clip_raw)
     )
     double_dqn = bool(train_config.get("double_dqn", True))
+    use_action_mask = bool(train_config.get("use_action_mask", True))
 
     agent = DQNAgent(
         observation_dim=train_env.observation_dim,
@@ -122,22 +126,27 @@ def train_and_evaluate_dqn(
 
         while not done:
             epsilon = linear_epsilon(global_step, start_epsilon, end_epsilon, epsilon_decay_steps)
-            action = agent.act(
-                observation,
-                epsilon=epsilon,
-                action_mask=build_action_mask(
+            action_mask = None
+            if use_action_mask:
+                action_mask = build_action_mask(
                     observation,
                     info=info,
                     action_dim=agent.action_dim,
-                ),
+                )
+            action = agent.act(
+                observation,
+                epsilon=epsilon,
+                action_mask=action_mask,
             )
             next_observation, reward, terminated, truncated, next_info = train_env.step(action)
             done = bool(terminated or truncated)
-            next_action_mask = build_action_mask(
-                next_observation,
-                info=next_info,
-                action_dim=agent.action_dim,
-            )
+            next_action_mask = None
+            if use_action_mask:
+                next_action_mask = build_action_mask(
+                    next_observation,
+                    info=next_info,
+                    action_dim=agent.action_dim,
+                )
             agent.observe(
                 observation,
                 action,
@@ -178,7 +187,7 @@ def train_and_evaluate_dqn(
     agent.save(str(checkpoint_path))
 
     policies = make_baseline_policies(train_env)
-    policies["dqn"] = make_masked_dqn_policy(agent)
+    policies["dqn"] = make_dqn_policy(agent, use_action_mask=use_action_mask)
 
     evaluation_results: dict[str, dict[str, dict[str, float]]] = {}
     if verbose:
@@ -219,6 +228,7 @@ def train_and_evaluate_dqn(
         "train_schedule_name": str(env_config.get("train_schedule_name", "train_schedule")),
         "evaluation_regimes": list(env_config["evaluation_regimes"].keys()),
         "double_dqn": double_dqn,
+        "use_action_mask": use_action_mask,
         "gradient_clip_norm": gradient_clip_norm,
     }
     if run_metadata:
@@ -318,6 +328,7 @@ def train_and_evaluate_dqn_multiseed(
             dict(config["evaluation"]).get("episodes_per_regime", 10)
         ),
         "double_dqn": bool(train_config.get("double_dqn", True)),
+        "use_action_mask": bool(train_config.get("use_action_mask", True)),
         "gradient_clip_norm": train_config.get("gradient_clip_norm"),
     }
     summary = {

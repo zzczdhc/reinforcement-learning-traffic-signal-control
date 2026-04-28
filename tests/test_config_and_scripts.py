@@ -290,57 +290,26 @@ global_defaults:
   output_root: {output_root}
   seeds: [5]
 studies:
-  reward_design:
+  algorithm_update:
     variants:
-      queue_reward:
+      vanilla_dqn:
         overrides:
-          environment:
-            reward_mode: queue
-      waiting_reward:
+          training:
+            double_dqn: false
+      double_dqn:
         overrides:
-          environment:
-            reward_mode: waiting
-  state_representation:
+          training:
+            double_dqn: true
+  action_masking:
     variants:
-      minimal_state:
+      mask_off:
         overrides:
-          environment:
-            observation_variant: minimal
-      full_state:
+          training:
+            use_action_mask: false
+      mask_on:
         overrides:
-          environment:
-            observation_variant: full
-  switch_penalty:
-    variants:
-      penalty_0:
-        overrides:
-          environment:
-            switch_penalty: 0.0
-      penalty_1:
-        overrides:
-          environment:
-            switch_penalty: 1.0
-  generalization:
-    variants:
-      train_stationary:
-        overrides: {{}}
-      train_nonstationary:
-        overrides:
-          environment:
-            train_schedule_name: nonstationary_smoke
-            train_schedule:
-              - until_step: 6
-                rates:
-                  N: 0.4
-                  S: 0.4
-                  E: 0.4
-                  W: 0.4
-              - until_step: 12
-                rates:
-                  N: 0.3
-                  S: 0.3
-                  E: 1.0
-                  W: 1.0
+          training:
+            use_action_mask: true
 """.strip(),
                 encoding="utf-8",
             )
@@ -376,16 +345,15 @@ studies:
             payload = json.loads(summary_path.read_text(encoding="utf-8"))
             summary_exists = summary_path.exists()
             queue_plot_exists = (figure_dir / "baseline_vs_dqn_avg_queue.png").exists()
-            penalty_plot_exists = (figure_dir / "switch_penalty_invalid_switch.png").exists()
-            generalization_plot_exists = (figure_dir / "generalization_avg_queue.png").exists()
+            double_dqn_plot_exists = (figure_dir / "double_dqn_ablation_avg_wait.png").exists()
+            action_mask_plot_exists = (figure_dir / "action_mask_invalid_switch.png").exists()
 
         self.assertTrue(summary_exists)
-        self.assertIn("reward_design", payload["studies"])
-        self.assertIn("generalization", payload["studies"])
-        self.assertIn("minimal_state", payload["studies"]["state_representation"]["variants"])
+        self.assertIn("algorithm_update", payload["studies"])
+        self.assertIn("action_masking", payload["studies"])
         self.assertTrue(queue_plot_exists)
-        self.assertTrue(penalty_plot_exists)
-        self.assertTrue(generalization_plot_exists)
+        self.assertTrue(double_dqn_plot_exists)
+        self.assertTrue(action_mask_plot_exists)
         self.assertIn("Saved ablation summary", ablation_result.stdout)
         self.assertIn("Saved figures", plot_result.stdout)
 
