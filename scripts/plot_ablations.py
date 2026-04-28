@@ -113,6 +113,14 @@ def plot_variant_metric(
 
 
 def find_reference_variant(summary: dict) -> tuple[str, str]:
+    preferred_variants = [
+        ("algorithm_update", "double_dqn"),
+    ]
+    for study_name, variant_name in preferred_variants:
+        study = summary["studies"].get(study_name)
+        if study and variant_name in study["variants"]:
+            return study_name, variant_name
+
     for study_name, study in summary["studies"].items():
         if study["variant_order"]:
             return study_name, study["variant_order"][0]
@@ -160,51 +168,35 @@ def main() -> None:
 
     plot_variant_metric(
         summary=summary,
-        study_name="reward_design",
-        metric_name="average_queue_length",
-        title="Reward Ablation: Mean Queue Across Regimes",
-        ylabel="Average Queue Length",
-        output_path=output_dir / "reward_ablation_avg_queue.png",
-    )
-    plot_variant_metric(
-        summary=summary,
-        study_name="state_representation",
-        metric_name="average_queue_length",
-        title="State Ablation: Mean Queue Across Regimes",
-        ylabel="Average Queue Length",
-        output_path=output_dir / "state_ablation_avg_queue.png",
-    )
-    plot_variant_metric(
-        summary=summary,
-        study_name="switch_penalty",
-        metric_name="invalid_switch_count",
-        title="Switch Penalty Ablation: Invalid Switches",
-        ylabel="Invalid Switch Count",
-        output_path=output_dir / "switch_penalty_invalid_switch.png",
-    )
-    plot_variant_metric(
-        summary=summary,
-        study_name="switch_penalty",
-        metric_name="switch_count",
-        title="Switch Penalty Ablation: Applied Switches",
-        ylabel="Applied Switch Count",
-        output_path=output_dir / "switch_penalty_switch_count.png",
-    )
-    plot_variant_metric(
-        summary=summary,
-        study_name="generalization",
-        metric_name="average_queue_length",
-        title="Generalization: Mean Queue Across Regimes",
-        ylabel="Average Queue Length",
-        output_path=output_dir / "generalization_avg_queue.png",
-    )
-    plot_variant_metric(
-        summary=summary,
-        study_name="generalization",
+        study_name="algorithm_update",
         metric_name="average_wait_time_seconds",
-        title="Generalization: Mean Wait Across Regimes",
+        title="DQN Ablation: Mean Wait Across Regimes",
         ylabel="Average Wait Time (seconds)",
-        output_path=output_dir / "generalization_avg_wait.png",
+        output_path=output_dir / "double_dqn_ablation_avg_wait.png",
+    )
+    plot_variant_metric(
+        summary=summary,
+        study_name="algorithm_update",
+        metric_name="average_queue_length",
+        title="DQN Ablation: Mean Queue Across Regimes",
+        ylabel="Average Queue Length",
+        output_path=output_dir / "double_dqn_ablation_avg_queue.png",
+    )
+    plot_variant_metric(
+        summary=summary,
+        study_name="action_masking",
+        metric_name="invalid_switch_count",
+        title="Action Mask Ablation: Invalid Switch Requests",
+        ylabel="Invalid Switch Count",
+        output_path=output_dir / "action_mask_invalid_switch.png",
+    )
+    plot_variant_metric(
+        summary=summary,
+        study_name="action_masking",
+        metric_name="average_wait_time_seconds",
+        title="Action Mask Ablation: Mean Wait Across Regimes",
+        ylabel="Average Wait Time (seconds)",
+        output_path=output_dir / "action_mask_avg_wait.png",
     )
 
     print(f"Saved figures to {output_dir}")

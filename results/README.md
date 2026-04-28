@@ -1,39 +1,32 @@
 # Results
 
-This directory stores generated experiment artifacts.
+This directory keeps the clean final artifacts used for the report and
+presentation.
 
-Expected outputs:
+Final outputs live under `results/final_clean/`:
 
-- `baseline_summary.json` from `scripts/run_baselines.py`
-- `dqn_summary.json` from `scripts/train_dqn.py`
-- `dqn_multiseed_summary.json` from `scripts/train_dqn.py --seeds 7,17,27`
-- `checkpoints/dqn_policy.pt` from `scripts/train_dqn.py`
-- `multiseed/seed_*/dqn_summary.json` from multi-seed DQN runs
-- `ablations/ablation_summary.json` from `scripts/run_ablations.py`
-- `../figures/*.png` from `scripts/plot_ablations.py`
+- `baselines/baseline_summary.json`: baseline policy evaluation
+- `final_double_dqn/dqn_multiseed_summary.json`: final tuned Double DQN, seeds 7/17/27
+- `original_double_dqn/dqn_multiseed_summary.json`: original Double DQN hyperparameters, seeds 7/17/27
+- `ablations/ablation_summary.json`: core ablations for Double DQN and action masking
+- `grid_2x2/baselines/baseline_summary.json`: 2x2 grid baseline evaluation
+- `grid_2x2/dqn_multiseed_summary.json`: 2x2 grid Double DQN, seeds 7/17/27
+- `figures/`: presentation-ready PNG/PDF figures
+- `tables/`: CSV tables used by the figures and summary
+- `final_statistics.md`: concise final numerical summary
+- `final_statistics.json`: machine-readable final summary
 
-Checkpoints created before the 13D observation update are not compatible with
-the current model input shape and should be regenerated.
+The 2x2 grid extension figures are:
 
-Quick inspection:
+- `figures/fig08_2x2_wait_rl_vs_baselines.png`
+- `figures/fig09_2x2_queue_rl_vs_baselines.png`
 
-```bash
-python3 scripts/summarize_results.py results/baseline_summary.json
-python3 scripts/summarize_results.py results/dqn_summary.json
-```
-
-Multi-seed DQN:
-
-```bash
-python3 scripts/train_dqn.py --config configs/default.yaml --seeds 7,17,27 --no-plots
-```
-
-Ablation workflow:
+Regenerate the final assets after the experiments finish:
 
 ```bash
-python3 scripts/run_ablations.py --config configs/ablations.yaml
-python3 scripts/plot_ablations.py results/ablations/ablation_summary.json
+python3 scripts/build_final_assets.py --results-root results/final_clean
 ```
 
-The default ablation config now includes reward, state, switch-penalty, and
-train-distribution generalization comparisons.
+The report uses queue reward mode. Earlier reward-design experiments found
+queue-based and waiting-time rewards to give very similar results, so the final
+presentation keeps the simpler queue-based objective.

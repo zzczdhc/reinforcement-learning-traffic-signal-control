@@ -1,0 +1,2604 @@
+{
+  "metadata": {
+    "timestamp": "2026-04-28T00:46:48.390480+00:00",
+    "run_count": 3,
+    "network_type": "1x1",
+    "grid_shape": null,
+    "intersection_ids": null,
+    "train_schedule_name": "stationary_balanced",
+    "evaluation_regimes": [
+      "symmetric_low",
+      "symmetric_high",
+      "asymmetric",
+      "nonstationary",
+      "burst_east_west"
+    ],
+    "reward_mode": "queue",
+    "switch_penalty": 2.0,
+    "observation_variant": "full",
+    "episodes": 250,
+    "evaluation_episodes_per_regime": 20,
+    "double_dqn": true,
+    "use_action_mask": true,
+    "gradient_clip_norm": null
+  },
+  "config": {
+    "environment": {
+      "network_type": "1x1",
+      "train_schedule_name": "stationary_balanced",
+      "episode_length": 200,
+      "step_seconds": 3,
+      "min_green_time": 2,
+      "yellow_time": 1,
+      "max_departures_per_step": 4,
+      "recent_arrival_window": 5,
+      "observation_variant": "full",
+      "reward_mode": "queue",
+      "switch_penalty": 2.0,
+      "train_schedule": [
+        {
+          "until_step": 200,
+          "rates": {
+            "N": 0.8,
+            "S": 0.8,
+            "E": 0.8,
+            "W": 0.8
+          }
+        }
+      ],
+      "evaluation_regimes": {
+        "symmetric_low": [
+          {
+            "until_step": 200,
+            "rates": {
+              "N": 0.5,
+              "S": 0.5,
+              "E": 0.5,
+              "W": 0.5
+            }
+          }
+        ],
+        "symmetric_high": [
+          {
+            "until_step": 200,
+            "rates": {
+              "N": 1.2,
+              "S": 1.2,
+              "E": 1.2,
+              "W": 1.2
+            }
+          }
+        ],
+        "asymmetric": [
+          {
+            "until_step": 200,
+            "rates": {
+              "N": 0.5,
+              "S": 0.5,
+              "E": 1.4,
+              "W": 1.4
+            }
+          }
+        ],
+        "nonstationary": [
+          {
+            "until_step": 80,
+            "rates": {
+              "N": 0.4,
+              "S": 0.4,
+              "E": 0.4,
+              "W": 0.4
+            }
+          },
+          {
+            "until_step": 140,
+            "rates": {
+              "N": 0.9,
+              "S": 0.9,
+              "E": 1.3,
+              "W": 1.3
+            }
+          },
+          {
+            "until_step": 200,
+            "rates": {
+              "N": 0.6,
+              "S": 0.6,
+              "E": 1.0,
+              "W": 1.0
+            }
+          }
+        ],
+        "burst_east_west": [
+          {
+            "until_step": 70,
+            "rates": {
+              "N": 0.7,
+              "S": 0.7,
+              "E": 0.7,
+              "W": 0.7
+            }
+          },
+          {
+            "until_step": 100,
+            "rates": {
+              "N": 0.7,
+              "S": 0.7,
+              "E": 2.0,
+              "W": 2.0
+            }
+          },
+          {
+            "until_step": 200,
+            "rates": {
+              "N": 0.7,
+              "S": 0.7,
+              "E": 0.8,
+              "W": 0.8
+            }
+          }
+        ]
+      }
+    },
+    "training": {
+      "episodes": 250,
+      "gamma": 0.99,
+      "learning_rate": 0.001,
+      "batch_size": 64,
+      "buffer_size": 50000,
+      "hidden_dims": [
+        128,
+        128
+      ],
+      "start_epsilon": 1.0,
+      "end_epsilon": 0.05,
+      "epsilon_decay_steps": 20000,
+      "warmup_steps": 500,
+      "update_frequency": 1,
+      "target_sync_steps": 250,
+      "double_dqn": true,
+      "use_action_mask": true,
+      "gradient_clip_norm": null,
+      "seed": 7,
+      "log_interval_episodes": 25
+    },
+    "evaluation": {
+      "episodes_per_regime": 20
+    },
+    "tuning": {
+      "search_type": "grid",
+      "seed": 11,
+      "max_trials": 12,
+      "fixed_overrides": {
+        "training.episodes": 150,
+        "training.warmup_steps": 300
+      },
+      "objective": {
+        "regime": "nonstationary",
+        "policy": "dqn",
+        "metric": "average_wait_time_seconds",
+        "mode": "min"
+      },
+      "search_space": {
+        "training.learning_rate": [
+          0.001,
+          0.0005,
+          0.0002
+        ],
+        "training.gamma": [
+          0.97,
+          0.99
+        ],
+        "training.batch_size": [
+          64,
+          128
+        ],
+        "training.hidden_dims": [
+          [
+            128,
+            128
+          ],
+          [
+            256,
+            128
+          ]
+        ]
+      }
+    }
+  },
+  "seeds": [
+    7,
+    17,
+    27
+  ],
+  "runs": [
+    {
+      "seed": 7,
+      "summary_path": "/Users/leijinghan/Downloads/reinforcement-learning-traffic-signal-control-main/results/final_clean/original_double_dqn/multiseed/seed_7/dqn_summary.json",
+      "checkpoint": "/Users/leijinghan/Downloads/reinforcement-learning-traffic-signal-control-main/results/final_clean/original_double_dqn/multiseed/seed_7/dqn_policy.pt",
+      "metadata": {
+        "study_name": "default",
+        "variant_name": "default",
+        "network_type": "1x1",
+        "grid_shape": null,
+        "intersection_ids": null,
+        "seed": 7,
+        "reward_mode": "queue",
+        "switch_penalty": 2.0,
+        "observation_variant": "full",
+        "episodes": 250,
+        "evaluation_episodes_per_regime": 20,
+        "train_schedule_name": "stationary_balanced",
+        "evaluation_regimes": [
+          "symmetric_low",
+          "symmetric_high",
+          "asymmetric",
+          "nonstationary",
+          "burst_east_west"
+        ],
+        "double_dqn": true,
+        "use_action_mask": true,
+        "gradient_clip_norm": null,
+        "multiseed": true
+      },
+      "final_training_episode": {
+        "total_reward": -1944.0,
+        "average_queue_length": 9.18,
+        "maximum_queue_length": 18.0,
+        "throughput_per_step": 3.22,
+        "total_departed": 644.0,
+        "average_wait_time_steps": 2.829192546583851,
+        "average_wait_time_seconds": 8.487577639751553,
+        "switch_count": 54.0,
+        "switch_requested_count": 54.0,
+        "switch_applied_count": 54.0,
+        "invalid_switch_count": 0.0,
+        "episode": 249.0,
+        "epsilon": 0.05,
+        "mean_loss": 76.65621597290038,
+        "switch_frequency_per_step": 0.27,
+        "switch_request_frequency_per_step": 0.27,
+        "invalid_action_frequency_per_step": 0.0
+      },
+      "evaluation_results": {
+        "symmetric_low": {
+          "fixed_cycle": {
+            "total_reward": -1920.15,
+            "average_queue_length": 9.42075,
+            "maximum_queue_length": 22.3,
+            "throughput_per_step": 1.9560000000000002,
+            "total_departed": 391.2,
+            "average_wait_time_steps": 4.779090752446331,
+            "average_wait_time_seconds": 14.337272257338986,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -1303.85,
+            "average_queue_length": 6.23175,
+            "maximum_queue_length": 14.5,
+            "throughput_per_step": 1.9572500000000002,
+            "total_departed": 391.45,
+            "average_wait_time_steps": 3.141217109779426,
+            "average_wait_time_seconds": 9.42365132933828,
+            "switch_count": 28.75,
+            "switch_requested_count": 28.75,
+            "switch_applied_count": 28.75,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.14375,
+            "switch_request_frequency_per_step": 0.14375,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -1130.0,
+            "average_queue_length": 5.031000000000001,
+            "maximum_queue_length": 13.05,
+            "throughput_per_step": 1.9635000000000002,
+            "total_departed": 392.7,
+            "average_wait_time_steps": 2.5397090661029114,
+            "average_wait_time_seconds": 7.6191271983087345,
+            "switch_count": 61.9,
+            "switch_requested_count": 61.9,
+            "switch_applied_count": 61.9,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.3095,
+            "switch_request_frequency_per_step": 0.3095,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -1086.15,
+            "average_queue_length": 4.86375,
+            "maximum_queue_length": 13.25,
+            "throughput_per_step": 1.9622499999999998,
+            "total_departed": 392.45,
+            "average_wait_time_steps": 2.455077009441073,
+            "average_wait_time_seconds": 7.365231028323218,
+            "switch_count": 56.7,
+            "switch_requested_count": 56.7,
+            "switch_applied_count": 56.7,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.28350000000000003,
+            "switch_request_frequency_per_step": 0.28350000000000003,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        },
+        "symmetric_high": {
+          "fixed_cycle": {
+            "total_reward": -5349.5,
+            "average_queue_length": 26.567499999999995,
+            "maximum_queue_length": 46.0,
+            "throughput_per_step": 4.579000000000001,
+            "total_departed": 915.8,
+            "average_wait_time_steps": 5.6626337748900415,
+            "average_wait_time_seconds": 16.987901324670123,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -3501.7,
+            "average_queue_length": 17.044,
+            "maximum_queue_length": 31.45,
+            "throughput_per_step": 4.639000000000001,
+            "total_departed": 927.8,
+            "average_wait_time_steps": 3.612053898018061,
+            "average_wait_time_seconds": 10.836161694054185,
+            "switch_count": 46.45,
+            "switch_requested_count": 46.45,
+            "switch_applied_count": 46.45,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.23225,
+            "switch_request_frequency_per_step": 0.23225,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -4124.7,
+            "average_queue_length": 19.9865,
+            "maximum_queue_length": 35.9,
+            "throughput_per_step": 4.611,
+            "total_departed": 922.2,
+            "average_wait_time_steps": 4.205358626790728,
+            "average_wait_time_seconds": 12.616075880372183,
+            "switch_count": 63.7,
+            "switch_requested_count": 63.7,
+            "switch_applied_count": 63.7,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.3185,
+            "switch_request_frequency_per_step": 0.3185,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -3231.8,
+            "average_queue_length": 15.661000000000001,
+            "maximum_queue_length": 29.6,
+            "throughput_per_step": 4.64825,
+            "total_departed": 929.65,
+            "average_wait_time_steps": 3.3175640580591024,
+            "average_wait_time_seconds": 9.952692174177304,
+            "switch_count": 49.8,
+            "switch_requested_count": 49.8,
+            "switch_applied_count": 49.8,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.249,
+            "switch_request_frequency_per_step": 0.249,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        },
+        "asymmetric": {
+          "fixed_cycle": {
+            "total_reward": -4269.55,
+            "average_queue_length": 21.167749999999998,
+            "maximum_queue_length": 46.25,
+            "throughput_per_step": 3.682,
+            "total_departed": 736.4,
+            "average_wait_time_steps": 5.698268198024355,
+            "average_wait_time_seconds": 17.09480459407306,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -2349.15,
+            "average_queue_length": 11.40875,
+            "maximum_queue_length": 25.55,
+            "throughput_per_step": 3.6895000000000002,
+            "total_departed": 737.9,
+            "average_wait_time_steps": 3.042579919774061,
+            "average_wait_time_seconds": 9.12773975932218,
+            "switch_count": 33.7,
+            "switch_requested_count": 33.7,
+            "switch_applied_count": 33.7,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.1685,
+            "switch_request_frequency_per_step": 0.1685,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -2318.2,
+            "average_queue_length": 11.0395,
+            "maximum_queue_length": 24.6,
+            "throughput_per_step": 3.69525,
+            "total_departed": 739.05,
+            "average_wait_time_steps": 2.9532862505083033,
+            "average_wait_time_seconds": 8.859858751524913,
+            "switch_count": 55.15,
+            "switch_requested_count": 55.15,
+            "switch_applied_count": 55.15,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.27575,
+            "switch_request_frequency_per_step": 0.27575,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -2104.5,
+            "average_queue_length": 10.061,
+            "maximum_queue_length": 22.3,
+            "throughput_per_step": 3.70075,
+            "total_departed": 740.15,
+            "average_wait_time_steps": 2.685906365466013,
+            "average_wait_time_seconds": 8.05771909639804,
+            "switch_count": 46.15,
+            "switch_requested_count": 46.15,
+            "switch_applied_count": 46.15,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.23074999999999998,
+            "switch_request_frequency_per_step": 0.23074999999999998,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        },
+        "nonstationary": {
+          "fixed_cycle": {
+            "total_reward": -2966.95,
+            "average_queue_length": 14.654749999999998,
+            "maximum_queue_length": 40.45,
+            "throughput_per_step": 2.8065,
+            "total_departed": 561.3,
+            "average_wait_time_steps": 5.158332409867393,
+            "average_wait_time_seconds": 15.474997229602176,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -1913.0,
+            "average_queue_length": 9.2225,
+            "maximum_queue_length": 25.4,
+            "throughput_per_step": 2.81825,
+            "total_departed": 563.65,
+            "average_wait_time_steps": 3.223336045398485,
+            "average_wait_time_seconds": 9.670008136195454,
+            "switch_count": 34.25,
+            "switch_requested_count": 34.25,
+            "switch_applied_count": 34.25,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.17125,
+            "switch_request_frequency_per_step": 0.17125,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -1848.8,
+            "average_queue_length": 8.626,
+            "maximum_queue_length": 26.15,
+            "throughput_per_step": 2.825,
+            "total_departed": 565.0,
+            "average_wait_time_steps": 3.0176844231736735,
+            "average_wait_time_seconds": 9.05305326952102,
+            "switch_count": 61.8,
+            "switch_requested_count": 61.8,
+            "switch_applied_count": 61.8,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.309,
+            "switch_request_frequency_per_step": 0.309,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -1693.95,
+            "average_queue_length": 7.9277500000000005,
+            "maximum_queue_length": 23.65,
+            "throughput_per_step": 2.82525,
+            "total_departed": 565.05,
+            "average_wait_time_steps": 2.770464569503532,
+            "average_wait_time_seconds": 8.311393708510597,
+            "switch_count": 54.2,
+            "switch_requested_count": 54.2,
+            "switch_applied_count": 54.2,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.271,
+            "switch_request_frequency_per_step": 0.271,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        },
+        "burst_east_west": {
+          "fixed_cycle": {
+            "total_reward": -3468.35,
+            "average_queue_length": 17.16175,
+            "maximum_queue_length": 52.3,
+            "throughput_per_step": 3.15725,
+            "total_departed": 631.45,
+            "average_wait_time_steps": 5.368796870558815,
+            "average_wait_time_seconds": 16.106390611676446,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -2074.7,
+            "average_queue_length": 9.994499999999999,
+            "maximum_queue_length": 28.2,
+            "throughput_per_step": 3.17875,
+            "total_departed": 635.75,
+            "average_wait_time_steps": 3.108974178899719,
+            "average_wait_time_seconds": 9.326922536699156,
+            "switch_count": 37.9,
+            "switch_requested_count": 37.9,
+            "switch_applied_count": 37.9,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.1895,
+            "switch_request_frequency_per_step": 0.1895,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -2032.5,
+            "average_queue_length": 9.5395,
+            "maximum_queue_length": 28.5,
+            "throughput_per_step": 3.1777500000000005,
+            "total_departed": 635.55,
+            "average_wait_time_steps": 2.967091015657202,
+            "average_wait_time_seconds": 8.901273046971607,
+            "switch_count": 62.3,
+            "switch_requested_count": 62.3,
+            "switch_applied_count": 62.3,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.3115,
+            "switch_request_frequency_per_step": 0.3115,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -1901.9,
+            "average_queue_length": 8.961,
+            "maximum_queue_length": 25.6,
+            "throughput_per_step": 3.178,
+            "total_departed": 635.6,
+            "average_wait_time_steps": 2.7858951231980105,
+            "average_wait_time_seconds": 8.35768536959403,
+            "switch_count": 54.85,
+            "switch_requested_count": 54.85,
+            "switch_applied_count": 54.85,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.27425,
+            "switch_request_frequency_per_step": 0.27425,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        }
+      }
+    },
+    {
+      "seed": 17,
+      "summary_path": "/Users/leijinghan/Downloads/reinforcement-learning-traffic-signal-control-main/results/final_clean/original_double_dqn/multiseed/seed_17/dqn_summary.json",
+      "checkpoint": "/Users/leijinghan/Downloads/reinforcement-learning-traffic-signal-control-main/results/final_clean/original_double_dqn/multiseed/seed_17/dqn_policy.pt",
+      "metadata": {
+        "study_name": "default",
+        "variant_name": "default",
+        "network_type": "1x1",
+        "grid_shape": null,
+        "intersection_ids": null,
+        "seed": 17,
+        "reward_mode": "queue",
+        "switch_penalty": 2.0,
+        "observation_variant": "full",
+        "episodes": 250,
+        "evaluation_episodes_per_regime": 20,
+        "train_schedule_name": "stationary_balanced",
+        "evaluation_regimes": [
+          "symmetric_low",
+          "symmetric_high",
+          "asymmetric",
+          "nonstationary",
+          "burst_east_west"
+        ],
+        "double_dqn": true,
+        "use_action_mask": true,
+        "gradient_clip_norm": null,
+        "multiseed": true
+      },
+      "final_training_episode": {
+        "total_reward": -1901.0,
+        "average_queue_length": 8.955,
+        "maximum_queue_length": 18.0,
+        "throughput_per_step": 3.27,
+        "total_departed": 654.0,
+        "average_wait_time_steps": 2.7018348623853212,
+        "average_wait_time_seconds": 8.105504587155963,
+        "switch_count": 55.0,
+        "switch_requested_count": 55.0,
+        "switch_applied_count": 55.0,
+        "invalid_switch_count": 0.0,
+        "episode": 249.0,
+        "epsilon": 0.05,
+        "mean_loss": 67.97599382400513,
+        "switch_frequency_per_step": 0.275,
+        "switch_request_frequency_per_step": 0.275,
+        "invalid_action_frequency_per_step": 0.0
+      },
+      "evaluation_results": {
+        "symmetric_low": {
+          "fixed_cycle": {
+            "total_reward": -1920.15,
+            "average_queue_length": 9.42075,
+            "maximum_queue_length": 22.3,
+            "throughput_per_step": 1.9560000000000002,
+            "total_departed": 391.2,
+            "average_wait_time_steps": 4.779090752446331,
+            "average_wait_time_seconds": 14.337272257338986,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -1303.85,
+            "average_queue_length": 6.23175,
+            "maximum_queue_length": 14.5,
+            "throughput_per_step": 1.9572500000000002,
+            "total_departed": 391.45,
+            "average_wait_time_steps": 3.141217109779426,
+            "average_wait_time_seconds": 9.42365132933828,
+            "switch_count": 28.75,
+            "switch_requested_count": 28.75,
+            "switch_applied_count": 28.75,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.14375,
+            "switch_request_frequency_per_step": 0.14375,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -1130.0,
+            "average_queue_length": 5.031000000000001,
+            "maximum_queue_length": 13.05,
+            "throughput_per_step": 1.9635000000000002,
+            "total_departed": 392.7,
+            "average_wait_time_steps": 2.5397090661029114,
+            "average_wait_time_seconds": 7.6191271983087345,
+            "switch_count": 61.9,
+            "switch_requested_count": 61.9,
+            "switch_applied_count": 61.9,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.3095,
+            "switch_request_frequency_per_step": 0.3095,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -1102.0,
+            "average_queue_length": 4.9384999999999994,
+            "maximum_queue_length": 13.2,
+            "throughput_per_step": 1.9625,
+            "total_departed": 392.5,
+            "average_wait_time_steps": 2.491602312247229,
+            "average_wait_time_seconds": 7.474806936741684,
+            "switch_count": 57.15,
+            "switch_requested_count": 57.15,
+            "switch_applied_count": 57.15,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.28575,
+            "switch_request_frequency_per_step": 0.28575,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        },
+        "symmetric_high": {
+          "fixed_cycle": {
+            "total_reward": -5349.5,
+            "average_queue_length": 26.567499999999995,
+            "maximum_queue_length": 46.0,
+            "throughput_per_step": 4.579000000000001,
+            "total_departed": 915.8,
+            "average_wait_time_steps": 5.6626337748900415,
+            "average_wait_time_seconds": 16.987901324670123,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -3501.7,
+            "average_queue_length": 17.044,
+            "maximum_queue_length": 31.45,
+            "throughput_per_step": 4.639000000000001,
+            "total_departed": 927.8,
+            "average_wait_time_steps": 3.612053898018061,
+            "average_wait_time_seconds": 10.836161694054185,
+            "switch_count": 46.45,
+            "switch_requested_count": 46.45,
+            "switch_applied_count": 46.45,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.23225,
+            "switch_request_frequency_per_step": 0.23225,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -4124.7,
+            "average_queue_length": 19.9865,
+            "maximum_queue_length": 35.9,
+            "throughput_per_step": 4.611,
+            "total_departed": 922.2,
+            "average_wait_time_steps": 4.205358626790728,
+            "average_wait_time_seconds": 12.616075880372183,
+            "switch_count": 63.7,
+            "switch_requested_count": 63.7,
+            "switch_applied_count": 63.7,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.3185,
+            "switch_request_frequency_per_step": 0.3185,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -3307.95,
+            "average_queue_length": 16.02025,
+            "maximum_queue_length": 29.85,
+            "throughput_per_step": 4.64475,
+            "total_departed": 928.95,
+            "average_wait_time_steps": 3.3922848299544013,
+            "average_wait_time_seconds": 10.176854489863203,
+            "switch_count": 51.95,
+            "switch_requested_count": 51.95,
+            "switch_applied_count": 51.95,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.25975000000000004,
+            "switch_request_frequency_per_step": 0.25975000000000004,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        },
+        "asymmetric": {
+          "fixed_cycle": {
+            "total_reward": -4269.55,
+            "average_queue_length": 21.167749999999998,
+            "maximum_queue_length": 46.25,
+            "throughput_per_step": 3.682,
+            "total_departed": 736.4,
+            "average_wait_time_steps": 5.698268198024355,
+            "average_wait_time_seconds": 17.09480459407306,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -2349.15,
+            "average_queue_length": 11.40875,
+            "maximum_queue_length": 25.55,
+            "throughput_per_step": 3.6895000000000002,
+            "total_departed": 737.9,
+            "average_wait_time_steps": 3.042579919774061,
+            "average_wait_time_seconds": 9.12773975932218,
+            "switch_count": 33.7,
+            "switch_requested_count": 33.7,
+            "switch_applied_count": 33.7,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.1685,
+            "switch_request_frequency_per_step": 0.1685,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -2318.2,
+            "average_queue_length": 11.0395,
+            "maximum_queue_length": 24.6,
+            "throughput_per_step": 3.69525,
+            "total_departed": 739.05,
+            "average_wait_time_steps": 2.9532862505083033,
+            "average_wait_time_seconds": 8.859858751524913,
+            "switch_count": 55.15,
+            "switch_requested_count": 55.15,
+            "switch_applied_count": 55.15,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.27575,
+            "switch_request_frequency_per_step": 0.27575,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -2133.1,
+            "average_queue_length": 10.212,
+            "maximum_queue_length": 23.2,
+            "throughput_per_step": 3.7015000000000002,
+            "total_departed": 740.3,
+            "average_wait_time_steps": 2.7263939750228343,
+            "average_wait_time_seconds": 8.179181925068502,
+            "switch_count": 45.35,
+            "switch_requested_count": 45.35,
+            "switch_applied_count": 45.35,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.22675,
+            "switch_request_frequency_per_step": 0.22675,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        },
+        "nonstationary": {
+          "fixed_cycle": {
+            "total_reward": -2966.95,
+            "average_queue_length": 14.654749999999998,
+            "maximum_queue_length": 40.45,
+            "throughput_per_step": 2.8065,
+            "total_departed": 561.3,
+            "average_wait_time_steps": 5.158332409867393,
+            "average_wait_time_seconds": 15.474997229602176,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -1913.0,
+            "average_queue_length": 9.2225,
+            "maximum_queue_length": 25.4,
+            "throughput_per_step": 2.81825,
+            "total_departed": 563.65,
+            "average_wait_time_steps": 3.223336045398485,
+            "average_wait_time_seconds": 9.670008136195454,
+            "switch_count": 34.25,
+            "switch_requested_count": 34.25,
+            "switch_applied_count": 34.25,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.17125,
+            "switch_request_frequency_per_step": 0.17125,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -1848.8,
+            "average_queue_length": 8.626,
+            "maximum_queue_length": 26.15,
+            "throughput_per_step": 2.825,
+            "total_departed": 565.0,
+            "average_wait_time_steps": 3.0176844231736735,
+            "average_wait_time_seconds": 9.05305326952102,
+            "switch_count": 61.8,
+            "switch_requested_count": 61.8,
+            "switch_applied_count": 61.8,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.309,
+            "switch_request_frequency_per_step": 0.309,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -1732.0,
+            "average_queue_length": 8.114,
+            "maximum_queue_length": 23.85,
+            "throughput_per_step": 2.8259999999999996,
+            "total_departed": 565.2,
+            "average_wait_time_steps": 2.833188954771512,
+            "average_wait_time_seconds": 8.499566864314536,
+            "switch_count": 54.6,
+            "switch_requested_count": 54.6,
+            "switch_applied_count": 54.6,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.273,
+            "switch_request_frequency_per_step": 0.273,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        },
+        "burst_east_west": {
+          "fixed_cycle": {
+            "total_reward": -3468.35,
+            "average_queue_length": 17.16175,
+            "maximum_queue_length": 52.3,
+            "throughput_per_step": 3.15725,
+            "total_departed": 631.45,
+            "average_wait_time_steps": 5.368796870558815,
+            "average_wait_time_seconds": 16.106390611676446,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -2074.7,
+            "average_queue_length": 9.994499999999999,
+            "maximum_queue_length": 28.2,
+            "throughput_per_step": 3.17875,
+            "total_departed": 635.75,
+            "average_wait_time_steps": 3.108974178899719,
+            "average_wait_time_seconds": 9.326922536699156,
+            "switch_count": 37.9,
+            "switch_requested_count": 37.9,
+            "switch_applied_count": 37.9,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.1895,
+            "switch_request_frequency_per_step": 0.1895,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -2032.5,
+            "average_queue_length": 9.5395,
+            "maximum_queue_length": 28.5,
+            "throughput_per_step": 3.1777500000000005,
+            "total_departed": 635.55,
+            "average_wait_time_steps": 2.967091015657202,
+            "average_wait_time_seconds": 8.901273046971607,
+            "switch_count": 62.3,
+            "switch_requested_count": 62.3,
+            "switch_applied_count": 62.3,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.3115,
+            "switch_request_frequency_per_step": 0.3115,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -1903.5,
+            "average_queue_length": 8.973000000000003,
+            "maximum_queue_length": 25.6,
+            "throughput_per_step": 3.1807499999999997,
+            "total_departed": 636.15,
+            "average_wait_time_steps": 2.788803071361888,
+            "average_wait_time_seconds": 8.366409214085664,
+            "switch_count": 54.45,
+            "switch_requested_count": 54.45,
+            "switch_applied_count": 54.45,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.27225,
+            "switch_request_frequency_per_step": 0.27225,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        }
+      }
+    },
+    {
+      "seed": 27,
+      "summary_path": "/Users/leijinghan/Downloads/reinforcement-learning-traffic-signal-control-main/results/final_clean/original_double_dqn/multiseed/seed_27/dqn_summary.json",
+      "checkpoint": "/Users/leijinghan/Downloads/reinforcement-learning-traffic-signal-control-main/results/final_clean/original_double_dqn/multiseed/seed_27/dqn_policy.pt",
+      "metadata": {
+        "study_name": "default",
+        "variant_name": "default",
+        "network_type": "1x1",
+        "grid_shape": null,
+        "intersection_ids": null,
+        "seed": 27,
+        "reward_mode": "queue",
+        "switch_penalty": 2.0,
+        "observation_variant": "full",
+        "episodes": 250,
+        "evaluation_episodes_per_regime": 20,
+        "train_schedule_name": "stationary_balanced",
+        "evaluation_regimes": [
+          "symmetric_low",
+          "symmetric_high",
+          "asymmetric",
+          "nonstationary",
+          "burst_east_west"
+        ],
+        "double_dqn": true,
+        "use_action_mask": true,
+        "gradient_clip_norm": null,
+        "multiseed": true
+      },
+      "final_training_episode": {
+        "total_reward": -1822.0,
+        "average_queue_length": 8.57,
+        "maximum_queue_length": 18.0,
+        "throughput_per_step": 3.11,
+        "total_departed": 622.0,
+        "average_wait_time_steps": 2.7138263665594855,
+        "average_wait_time_seconds": 8.141479099678456,
+        "switch_count": 54.0,
+        "switch_requested_count": 54.0,
+        "switch_applied_count": 54.0,
+        "invalid_switch_count": 0.0,
+        "episode": 249.0,
+        "epsilon": 0.05,
+        "mean_loss": 85.3050022506714,
+        "switch_frequency_per_step": 0.27,
+        "switch_request_frequency_per_step": 0.27,
+        "invalid_action_frequency_per_step": 0.0
+      },
+      "evaluation_results": {
+        "symmetric_low": {
+          "fixed_cycle": {
+            "total_reward": -1920.15,
+            "average_queue_length": 9.42075,
+            "maximum_queue_length": 22.3,
+            "throughput_per_step": 1.9560000000000002,
+            "total_departed": 391.2,
+            "average_wait_time_steps": 4.779090752446331,
+            "average_wait_time_seconds": 14.337272257338986,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -1303.85,
+            "average_queue_length": 6.23175,
+            "maximum_queue_length": 14.5,
+            "throughput_per_step": 1.9572500000000002,
+            "total_departed": 391.45,
+            "average_wait_time_steps": 3.141217109779426,
+            "average_wait_time_seconds": 9.42365132933828,
+            "switch_count": 28.75,
+            "switch_requested_count": 28.75,
+            "switch_applied_count": 28.75,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.14375,
+            "switch_request_frequency_per_step": 0.14375,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -1130.0,
+            "average_queue_length": 5.031000000000001,
+            "maximum_queue_length": 13.05,
+            "throughput_per_step": 1.9635000000000002,
+            "total_departed": 392.7,
+            "average_wait_time_steps": 2.5397090661029114,
+            "average_wait_time_seconds": 7.6191271983087345,
+            "switch_count": 61.9,
+            "switch_requested_count": 61.9,
+            "switch_applied_count": 61.9,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.3095,
+            "switch_request_frequency_per_step": 0.3095,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -1094.1,
+            "average_queue_length": 4.914999999999999,
+            "maximum_queue_length": 13.25,
+            "throughput_per_step": 1.9612500000000002,
+            "total_departed": 392.25,
+            "average_wait_time_steps": 2.479451857209039,
+            "average_wait_time_seconds": 7.438355571627116,
+            "switch_count": 55.55,
+            "switch_requested_count": 55.55,
+            "switch_applied_count": 55.55,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.27775,
+            "switch_request_frequency_per_step": 0.27775,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        },
+        "symmetric_high": {
+          "fixed_cycle": {
+            "total_reward": -5349.5,
+            "average_queue_length": 26.567499999999995,
+            "maximum_queue_length": 46.0,
+            "throughput_per_step": 4.579000000000001,
+            "total_departed": 915.8,
+            "average_wait_time_steps": 5.6626337748900415,
+            "average_wait_time_seconds": 16.987901324670123,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -3501.7,
+            "average_queue_length": 17.044,
+            "maximum_queue_length": 31.45,
+            "throughput_per_step": 4.639000000000001,
+            "total_departed": 927.8,
+            "average_wait_time_steps": 3.612053898018061,
+            "average_wait_time_seconds": 10.836161694054185,
+            "switch_count": 46.45,
+            "switch_requested_count": 46.45,
+            "switch_applied_count": 46.45,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.23225,
+            "switch_request_frequency_per_step": 0.23225,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -4124.7,
+            "average_queue_length": 19.9865,
+            "maximum_queue_length": 35.9,
+            "throughput_per_step": 4.611,
+            "total_departed": 922.2,
+            "average_wait_time_steps": 4.205358626790728,
+            "average_wait_time_seconds": 12.616075880372183,
+            "switch_count": 63.7,
+            "switch_requested_count": 63.7,
+            "switch_applied_count": 63.7,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.3185,
+            "switch_request_frequency_per_step": 0.3185,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -3233.25,
+            "average_queue_length": 15.67475,
+            "maximum_queue_length": 29.0,
+            "throughput_per_step": 4.642999999999999,
+            "total_departed": 928.6,
+            "average_wait_time_steps": 3.3228518802841984,
+            "average_wait_time_seconds": 9.968555640852593,
+            "switch_count": 49.15,
+            "switch_requested_count": 49.15,
+            "switch_applied_count": 49.15,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.24575,
+            "switch_request_frequency_per_step": 0.24575,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        },
+        "asymmetric": {
+          "fixed_cycle": {
+            "total_reward": -4269.55,
+            "average_queue_length": 21.167749999999998,
+            "maximum_queue_length": 46.25,
+            "throughput_per_step": 3.682,
+            "total_departed": 736.4,
+            "average_wait_time_steps": 5.698268198024355,
+            "average_wait_time_seconds": 17.09480459407306,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -2349.15,
+            "average_queue_length": 11.40875,
+            "maximum_queue_length": 25.55,
+            "throughput_per_step": 3.6895000000000002,
+            "total_departed": 737.9,
+            "average_wait_time_steps": 3.042579919774061,
+            "average_wait_time_seconds": 9.12773975932218,
+            "switch_count": 33.7,
+            "switch_requested_count": 33.7,
+            "switch_applied_count": 33.7,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.1685,
+            "switch_request_frequency_per_step": 0.1685,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -2318.2,
+            "average_queue_length": 11.0395,
+            "maximum_queue_length": 24.6,
+            "throughput_per_step": 3.69525,
+            "total_departed": 739.05,
+            "average_wait_time_steps": 2.9532862505083033,
+            "average_wait_time_seconds": 8.859858751524913,
+            "switch_count": 55.15,
+            "switch_requested_count": 55.15,
+            "switch_applied_count": 55.15,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.27575,
+            "switch_request_frequency_per_step": 0.27575,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -2110.55,
+            "average_queue_length": 10.094750000000001,
+            "maximum_queue_length": 22.1,
+            "throughput_per_step": 3.7017500000000005,
+            "total_departed": 740.35,
+            "average_wait_time_steps": 2.6942516272580206,
+            "average_wait_time_seconds": 8.082754881774061,
+            "switch_count": 45.8,
+            "switch_requested_count": 45.8,
+            "switch_applied_count": 45.8,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.22899999999999998,
+            "switch_request_frequency_per_step": 0.22899999999999998,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        },
+        "nonstationary": {
+          "fixed_cycle": {
+            "total_reward": -2966.95,
+            "average_queue_length": 14.654749999999998,
+            "maximum_queue_length": 40.45,
+            "throughput_per_step": 2.8065,
+            "total_departed": 561.3,
+            "average_wait_time_steps": 5.158332409867393,
+            "average_wait_time_seconds": 15.474997229602176,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -1913.0,
+            "average_queue_length": 9.2225,
+            "maximum_queue_length": 25.4,
+            "throughput_per_step": 2.81825,
+            "total_departed": 563.65,
+            "average_wait_time_steps": 3.223336045398485,
+            "average_wait_time_seconds": 9.670008136195454,
+            "switch_count": 34.25,
+            "switch_requested_count": 34.25,
+            "switch_applied_count": 34.25,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.17125,
+            "switch_request_frequency_per_step": 0.17125,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -1848.8,
+            "average_queue_length": 8.626,
+            "maximum_queue_length": 26.15,
+            "throughput_per_step": 2.825,
+            "total_departed": 565.0,
+            "average_wait_time_steps": 3.0176844231736735,
+            "average_wait_time_seconds": 9.05305326952102,
+            "switch_count": 61.8,
+            "switch_requested_count": 61.8,
+            "switch_applied_count": 61.8,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.309,
+            "switch_request_frequency_per_step": 0.309,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -1681.5,
+            "average_queue_length": 7.893000000000001,
+            "maximum_queue_length": 23.05,
+            "throughput_per_step": 2.8225,
+            "total_departed": 564.5,
+            "average_wait_time_steps": 2.758434600820229,
+            "average_wait_time_seconds": 8.275303802460687,
+            "switch_count": 51.45,
+            "switch_requested_count": 51.45,
+            "switch_applied_count": 51.45,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.25725000000000003,
+            "switch_request_frequency_per_step": 0.25725000000000003,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        },
+        "burst_east_west": {
+          "fixed_cycle": {
+            "total_reward": -3468.35,
+            "average_queue_length": 17.16175,
+            "maximum_queue_length": 52.3,
+            "throughput_per_step": 3.15725,
+            "total_departed": 631.45,
+            "average_wait_time_steps": 5.368796870558815,
+            "average_wait_time_seconds": 16.106390611676446,
+            "switch_count": 18.0,
+            "switch_requested_count": 18.0,
+            "switch_applied_count": 18.0,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.09,
+            "switch_request_frequency_per_step": 0.09,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "queue_threshold": {
+            "total_reward": -2074.7,
+            "average_queue_length": 9.994499999999999,
+            "maximum_queue_length": 28.2,
+            "throughput_per_step": 3.17875,
+            "total_departed": 635.75,
+            "average_wait_time_steps": 3.108974178899719,
+            "average_wait_time_seconds": 9.326922536699156,
+            "switch_count": 37.9,
+            "switch_requested_count": 37.9,
+            "switch_applied_count": 37.9,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.1895,
+            "switch_request_frequency_per_step": 0.1895,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "max_pressure": {
+            "total_reward": -2032.5,
+            "average_queue_length": 9.5395,
+            "maximum_queue_length": 28.5,
+            "throughput_per_step": 3.1777500000000005,
+            "total_departed": 635.55,
+            "average_wait_time_steps": 2.967091015657202,
+            "average_wait_time_seconds": 8.901273046971607,
+            "switch_count": 62.3,
+            "switch_requested_count": 62.3,
+            "switch_applied_count": 62.3,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.3115,
+            "switch_request_frequency_per_step": 0.3115,
+            "invalid_action_frequency_per_step": 0.0
+          },
+          "dqn": {
+            "total_reward": -1877.9,
+            "average_queue_length": 8.843,
+            "maximum_queue_length": 24.6,
+            "throughput_per_step": 3.17525,
+            "total_departed": 635.05,
+            "average_wait_time_steps": 2.7475233158865042,
+            "average_wait_time_seconds": 8.242569947659513,
+            "switch_count": 54.65,
+            "switch_requested_count": 54.65,
+            "switch_applied_count": 54.65,
+            "invalid_switch_count": 0.0,
+            "switch_frequency_per_step": 0.27325,
+            "switch_request_frequency_per_step": 0.27325,
+            "invalid_action_frequency_per_step": 0.0
+          }
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "run_count": 3,
+    "per_regime": {
+      "symmetric_low": {
+        "fixed_cycle": {
+          "total_reward": {
+            "mean": -1920.1500000000003,
+            "std": 2.2737367544323206e-13
+          },
+          "average_queue_length": {
+            "mean": 9.42075,
+            "std": 0.0
+          },
+          "maximum_queue_length": {
+            "mean": 22.3,
+            "std": 0.0
+          },
+          "throughput_per_step": {
+            "mean": 1.9560000000000002,
+            "std": 0.0
+          },
+          "total_departed": {
+            "mean": 391.2,
+            "std": 0.0
+          },
+          "average_wait_time_steps": {
+            "mean": 4.779090752446331,
+            "std": 0.0
+          },
+          "average_wait_time_seconds": {
+            "mean": 14.337272257338986,
+            "std": 0.0
+          },
+          "switch_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "switch_requested_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "switch_applied_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.09000000000000001,
+            "std": 1.3877787807814457e-17
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.09000000000000001,
+            "std": 1.3877787807814457e-17
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "queue_threshold": {
+          "total_reward": {
+            "mean": -1303.85,
+            "std": 0.0
+          },
+          "average_queue_length": {
+            "mean": 6.231750000000001,
+            "std": 8.881784197001252e-16
+          },
+          "maximum_queue_length": {
+            "mean": 14.5,
+            "std": 0.0
+          },
+          "throughput_per_step": {
+            "mean": 1.9572500000000002,
+            "std": 0.0
+          },
+          "total_departed": {
+            "mean": 391.45,
+            "std": 0.0
+          },
+          "average_wait_time_steps": {
+            "mean": 3.141217109779426,
+            "std": 0.0
+          },
+          "average_wait_time_seconds": {
+            "mean": 9.42365132933828,
+            "std": 0.0
+          },
+          "switch_count": {
+            "mean": 28.75,
+            "std": 0.0
+          },
+          "switch_requested_count": {
+            "mean": 28.75,
+            "std": 0.0
+          },
+          "switch_applied_count": {
+            "mean": 28.75,
+            "std": 0.0
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.14375,
+            "std": 0.0
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.14375,
+            "std": 0.0
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "max_pressure": {
+          "total_reward": {
+            "mean": -1130.0,
+            "std": 0.0
+          },
+          "average_queue_length": {
+            "mean": 5.031000000000001,
+            "std": 0.0
+          },
+          "maximum_queue_length": {
+            "mean": 13.050000000000002,
+            "std": 1.7763568394002505e-15
+          },
+          "throughput_per_step": {
+            "mean": 1.9635000000000005,
+            "std": 2.220446049250313e-16
+          },
+          "total_departed": {
+            "mean": 392.7,
+            "std": 0.0
+          },
+          "average_wait_time_steps": {
+            "mean": 2.5397090661029114,
+            "std": 0.0
+          },
+          "average_wait_time_seconds": {
+            "mean": 7.6191271983087345,
+            "std": 0.0
+          },
+          "switch_count": {
+            "mean": 61.9,
+            "std": 0.0
+          },
+          "switch_requested_count": {
+            "mean": 61.9,
+            "std": 0.0
+          },
+          "switch_applied_count": {
+            "mean": 61.9,
+            "std": 0.0
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.3095,
+            "std": 0.0
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.3095,
+            "std": 0.0
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "dqn": {
+          "total_reward": {
+            "mean": -1094.0833333333333,
+            "std": 6.470746135922431
+          },
+          "average_queue_length": {
+            "mean": 4.905749999999999,
+            "std": 0.031209640604573794
+          },
+          "maximum_queue_length": {
+            "mean": 13.233333333333334,
+            "std": 0.02357022603955192
+          },
+          "throughput_per_step": {
+            "mean": 1.9619999999999997,
+            "std": 0.0005400617248671937
+          },
+          "total_departed": {
+            "mean": 392.40000000000003,
+            "std": 0.10801234497346258
+          },
+          "average_wait_time_steps": {
+            "mean": 2.475377059632447,
+            "std": 0.015187218699463356
+          },
+          "average_wait_time_seconds": {
+            "mean": 7.426131178897339,
+            "std": 0.045561656098389594
+          },
+          "switch_count": {
+            "mean": 56.46666666666666,
+            "std": 0.6737127643802591
+          },
+          "switch_requested_count": {
+            "mean": 56.46666666666666,
+            "std": 0.6737127643802591
+          },
+          "switch_applied_count": {
+            "mean": 56.46666666666666,
+            "std": 0.6737127643802591
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.2823333333333333,
+            "std": 0.0033685638219012955
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.2823333333333333,
+            "std": 0.0033685638219012955
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        }
+      },
+      "symmetric_high": {
+        "fixed_cycle": {
+          "total_reward": {
+            "mean": -5349.5,
+            "std": 0.0
+          },
+          "average_queue_length": {
+            "mean": 26.567499999999995,
+            "std": 0.0
+          },
+          "maximum_queue_length": {
+            "mean": 46.0,
+            "std": 0.0
+          },
+          "throughput_per_step": {
+            "mean": 4.579000000000001,
+            "std": 0.0
+          },
+          "total_departed": {
+            "mean": 915.7999999999998,
+            "std": 1.1368683772161603e-13
+          },
+          "average_wait_time_steps": {
+            "mean": 5.662633774890042,
+            "std": 8.881784197001252e-16
+          },
+          "average_wait_time_seconds": {
+            "mean": 16.987901324670123,
+            "std": 0.0
+          },
+          "switch_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "switch_requested_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "switch_applied_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.09000000000000001,
+            "std": 1.3877787807814457e-17
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.09000000000000001,
+            "std": 1.3877787807814457e-17
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "queue_threshold": {
+          "total_reward": {
+            "mean": -3501.6999999999994,
+            "std": 4.547473508864641e-13
+          },
+          "average_queue_length": {
+            "mean": 17.044,
+            "std": 0.0
+          },
+          "maximum_queue_length": {
+            "mean": 31.45,
+            "std": 0.0
+          },
+          "throughput_per_step": {
+            "mean": 4.639000000000001,
+            "std": 0.0
+          },
+          "total_departed": {
+            "mean": 927.7999999999998,
+            "std": 1.1368683772161603e-13
+          },
+          "average_wait_time_steps": {
+            "mean": 3.612053898018061,
+            "std": 0.0
+          },
+          "average_wait_time_seconds": {
+            "mean": 10.836161694054185,
+            "std": 0.0
+          },
+          "switch_count": {
+            "mean": 46.45000000000001,
+            "std": 7.105427357601002e-15
+          },
+          "switch_requested_count": {
+            "mean": 46.45000000000001,
+            "std": 7.105427357601002e-15
+          },
+          "switch_applied_count": {
+            "mean": 46.45000000000001,
+            "std": 7.105427357601002e-15
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.23224999999999998,
+            "std": 2.7755575615628914e-17
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.23224999999999998,
+            "std": 2.7755575615628914e-17
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "max_pressure": {
+          "total_reward": {
+            "mean": -4124.7,
+            "std": 0.0
+          },
+          "average_queue_length": {
+            "mean": 19.9865,
+            "std": 0.0
+          },
+          "maximum_queue_length": {
+            "mean": 35.9,
+            "std": 0.0
+          },
+          "throughput_per_step": {
+            "mean": 4.611,
+            "std": 0.0
+          },
+          "total_departed": {
+            "mean": 922.2000000000002,
+            "std": 1.1368683772161603e-13
+          },
+          "average_wait_time_steps": {
+            "mean": 4.205358626790728,
+            "std": 0.0
+          },
+          "average_wait_time_seconds": {
+            "mean": 12.616075880372184,
+            "std": 1.7763568394002505e-15
+          },
+          "switch_count": {
+            "mean": 63.70000000000001,
+            "std": 7.105427357601002e-15
+          },
+          "switch_requested_count": {
+            "mean": 63.70000000000001,
+            "std": 7.105427357601002e-15
+          },
+          "switch_applied_count": {
+            "mean": 63.70000000000001,
+            "std": 7.105427357601002e-15
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.3185,
+            "std": 0.0
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.3185,
+            "std": 0.0
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "dqn": {
+          "total_reward": {
+            "mean": -3257.6666666666665,
+            "std": 35.56061335554004
+          },
+          "average_queue_length": {
+            "mean": 15.785333333333334,
+            "std": 0.16620598832640054
+          },
+          "maximum_queue_length": {
+            "mean": 29.483333333333334,
+            "std": 0.3566822426505456
+          },
+          "throughput_per_step": {
+            "mean": 4.645333333333332,
+            "std": 0.0021826334756185053
+          },
+          "total_departed": {
+            "mean": 929.0666666666666,
+            "std": 0.43652669512360426
+          },
+          "average_wait_time_steps": {
+            "mean": 3.344233589432567,
+            "std": 0.03404586663836895
+          },
+          "average_wait_time_seconds": {
+            "mean": 10.0327007682977,
+            "std": 0.10213759991510768
+          },
+          "switch_count": {
+            "mean": 50.300000000000004,
+            "std": 1.19652273971984
+          },
+          "switch_requested_count": {
+            "mean": 50.300000000000004,
+            "std": 1.19652273971984
+          },
+          "switch_applied_count": {
+            "mean": 50.300000000000004,
+            "std": 1.19652273971984
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.2515,
+            "std": 0.005982613698599207
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.2515,
+            "std": 0.005982613698599207
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        }
+      },
+      "asymmetric": {
+        "fixed_cycle": {
+          "total_reward": {
+            "mean": -4269.55,
+            "std": 0.0
+          },
+          "average_queue_length": {
+            "mean": 21.167749999999998,
+            "std": 0.0
+          },
+          "maximum_queue_length": {
+            "mean": 46.25,
+            "std": 0.0
+          },
+          "throughput_per_step": {
+            "mean": 3.682,
+            "std": 0.0
+          },
+          "total_departed": {
+            "mean": 736.4,
+            "std": 0.0
+          },
+          "average_wait_time_steps": {
+            "mean": 5.698268198024355,
+            "std": 0.0
+          },
+          "average_wait_time_seconds": {
+            "mean": 17.09480459407306,
+            "std": 0.0
+          },
+          "switch_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "switch_requested_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "switch_applied_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.09000000000000001,
+            "std": 1.3877787807814457e-17
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.09000000000000001,
+            "std": 1.3877787807814457e-17
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "queue_threshold": {
+          "total_reward": {
+            "mean": -2349.15,
+            "std": 0.0
+          },
+          "average_queue_length": {
+            "mean": 11.40875,
+            "std": 0.0
+          },
+          "maximum_queue_length": {
+            "mean": 25.55,
+            "std": 0.0
+          },
+          "throughput_per_step": {
+            "mean": 3.6895000000000002,
+            "std": 0.0
+          },
+          "total_departed": {
+            "mean": 737.9,
+            "std": 0.0
+          },
+          "average_wait_time_steps": {
+            "mean": 3.042579919774061,
+            "std": 0.0
+          },
+          "average_wait_time_seconds": {
+            "mean": 9.12773975932218,
+            "std": 0.0
+          },
+          "switch_count": {
+            "mean": 33.7,
+            "std": 0.0
+          },
+          "switch_requested_count": {
+            "mean": 33.7,
+            "std": 0.0
+          },
+          "switch_applied_count": {
+            "mean": 33.7,
+            "std": 0.0
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.1685,
+            "std": 0.0
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.1685,
+            "std": 0.0
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "max_pressure": {
+          "total_reward": {
+            "mean": -2318.2,
+            "std": 0.0
+          },
+          "average_queue_length": {
+            "mean": 11.039499999999999,
+            "std": 1.7763568394002505e-15
+          },
+          "maximum_queue_length": {
+            "mean": 24.600000000000005,
+            "std": 3.552713678800501e-15
+          },
+          "throughput_per_step": {
+            "mean": 3.69525,
+            "std": 0.0
+          },
+          "total_departed": {
+            "mean": 739.0499999999998,
+            "std": 1.1368683772161603e-13
+          },
+          "average_wait_time_steps": {
+            "mean": 2.9532862505083037,
+            "std": 4.440892098500626e-16
+          },
+          "average_wait_time_seconds": {
+            "mean": 8.859858751524913,
+            "std": 0.0
+          },
+          "switch_count": {
+            "mean": 55.15,
+            "std": 0.0
+          },
+          "switch_requested_count": {
+            "mean": 55.15,
+            "std": 0.0
+          },
+          "switch_applied_count": {
+            "mean": 55.15,
+            "std": 0.0
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.27575,
+            "std": 0.0
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.27575,
+            "std": 0.0
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "dqn": {
+          "total_reward": {
+            "mean": -2116.05,
+            "std": 12.306570061014765
+          },
+          "average_queue_length": {
+            "mean": 10.122583333333333,
+            "std": 0.06471100284255263
+          },
+          "maximum_queue_length": {
+            "mean": 22.53333333333333,
+            "std": 0.47842333648024327
+          },
+          "throughput_per_step": {
+            "mean": 3.701333333333334,
+            "std": 0.00042491829279951156
+          },
+          "total_departed": {
+            "mean": 740.2666666666665,
+            "std": 0.08498365855989164
+          },
+          "average_wait_time_steps": {
+            "mean": 2.7021839892489563,
+            "std": 0.01745476834512234
+          },
+          "average_wait_time_seconds": {
+            "mean": 8.106551967746869,
+            "std": 0.05236430503536619
+          },
+          "switch_count": {
+            "mean": 45.76666666666667,
+            "std": 0.3274480450731404
+          },
+          "switch_requested_count": {
+            "mean": 45.76666666666667,
+            "std": 0.3274480450731404
+          },
+          "switch_applied_count": {
+            "mean": 45.76666666666667,
+            "std": 0.3274480450731404
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.22883333333333333,
+            "std": 0.0016372402253656982
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.22883333333333333,
+            "std": 0.0016372402253656982
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        }
+      },
+      "nonstationary": {
+        "fixed_cycle": {
+          "total_reward": {
+            "mean": -2966.9499999999994,
+            "std": 4.547473508864641e-13
+          },
+          "average_queue_length": {
+            "mean": 14.654749999999998,
+            "std": 0.0
+          },
+          "maximum_queue_length": {
+            "mean": 40.45,
+            "std": 0.0
+          },
+          "throughput_per_step": {
+            "mean": 2.8065,
+            "std": 0.0
+          },
+          "total_departed": {
+            "mean": 561.3,
+            "std": 0.0
+          },
+          "average_wait_time_steps": {
+            "mean": 5.158332409867393,
+            "std": 0.0
+          },
+          "average_wait_time_seconds": {
+            "mean": 15.474997229602176,
+            "std": 0.0
+          },
+          "switch_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "switch_requested_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "switch_applied_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.09000000000000001,
+            "std": 1.3877787807814457e-17
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.09000000000000001,
+            "std": 1.3877787807814457e-17
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "queue_threshold": {
+          "total_reward": {
+            "mean": -1913.0,
+            "std": 0.0
+          },
+          "average_queue_length": {
+            "mean": 9.2225,
+            "std": 0.0
+          },
+          "maximum_queue_length": {
+            "mean": 25.399999999999995,
+            "std": 3.552713678800501e-15
+          },
+          "throughput_per_step": {
+            "mean": 2.8182500000000004,
+            "std": 4.440892098500626e-16
+          },
+          "total_departed": {
+            "mean": 563.65,
+            "std": 0.0
+          },
+          "average_wait_time_steps": {
+            "mean": 3.223336045398485,
+            "std": 0.0
+          },
+          "average_wait_time_seconds": {
+            "mean": 9.670008136195454,
+            "std": 0.0
+          },
+          "switch_count": {
+            "mean": 34.25,
+            "std": 0.0
+          },
+          "switch_requested_count": {
+            "mean": 34.25,
+            "std": 0.0
+          },
+          "switch_applied_count": {
+            "mean": 34.25,
+            "std": 0.0
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.17125,
+            "std": 0.0
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.17125,
+            "std": 0.0
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "max_pressure": {
+          "total_reward": {
+            "mean": -1848.8,
+            "std": 0.0
+          },
+          "average_queue_length": {
+            "mean": 8.626,
+            "std": 0.0
+          },
+          "maximum_queue_length": {
+            "mean": 26.149999999999995,
+            "std": 3.552713678800501e-15
+          },
+          "throughput_per_step": {
+            "mean": 2.8250000000000006,
+            "std": 4.440892098500626e-16
+          },
+          "total_departed": {
+            "mean": 565.0,
+            "std": 0.0
+          },
+          "average_wait_time_steps": {
+            "mean": 3.0176844231736735,
+            "std": 0.0
+          },
+          "average_wait_time_seconds": {
+            "mean": 9.05305326952102,
+            "std": 0.0
+          },
+          "switch_count": {
+            "mean": 61.79999999999999,
+            "std": 7.105427357601002e-15
+          },
+          "switch_requested_count": {
+            "mean": 61.79999999999999,
+            "std": 7.105427357601002e-15
+          },
+          "switch_applied_count": {
+            "mean": 61.79999999999999,
+            "std": 7.105427357601002e-15
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.309,
+            "std": 0.0
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.309,
+            "std": 0.0
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "dqn": {
+          "total_reward": {
+            "mean": -1702.4833333333333,
+            "std": 21.48140022334567
+          },
+          "average_queue_length": {
+            "mean": 7.97825,
+            "std": 0.09703242585170527
+          },
+          "maximum_queue_length": {
+            "mean": 23.516666666666666,
+            "std": 0.3399346342395189
+          },
+          "throughput_per_step": {
+            "mean": 2.824583333333333,
+            "std": 0.0015046225071056348
+          },
+          "total_departed": {
+            "mean": 564.9166666666666,
+            "std": 0.30092450142113736
+          },
+          "average_wait_time_steps": {
+            "mean": 2.787362708365091,
+            "std": 0.03277411256267992
+          },
+          "average_wait_time_seconds": {
+            "mean": 8.362088125095273,
+            "std": 0.09832233768803968
+          },
+          "switch_count": {
+            "mean": 53.416666666666664,
+            "std": 1.4001983986405477
+          },
+          "switch_requested_count": {
+            "mean": 53.416666666666664,
+            "std": 1.4001983986405477
+          },
+          "switch_applied_count": {
+            "mean": 53.416666666666664,
+            "std": 1.4001983986405477
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.26708333333333334,
+            "std": 0.007000991993202734
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.26708333333333334,
+            "std": 0.007000991993202734
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        }
+      },
+      "burst_east_west": {
+        "fixed_cycle": {
+          "total_reward": {
+            "mean": -3468.35,
+            "std": 0.0
+          },
+          "average_queue_length": {
+            "mean": 17.16175,
+            "std": 0.0
+          },
+          "maximum_queue_length": {
+            "mean": 52.29999999999999,
+            "std": 7.105427357601002e-15
+          },
+          "throughput_per_step": {
+            "mean": 3.15725,
+            "std": 0.0
+          },
+          "total_departed": {
+            "mean": 631.45,
+            "std": 0.0
+          },
+          "average_wait_time_steps": {
+            "mean": 5.368796870558815,
+            "std": 0.0
+          },
+          "average_wait_time_seconds": {
+            "mean": 16.106390611676446,
+            "std": 0.0
+          },
+          "switch_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "switch_requested_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "switch_applied_count": {
+            "mean": 18.0,
+            "std": 0.0
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.09000000000000001,
+            "std": 1.3877787807814457e-17
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.09000000000000001,
+            "std": 1.3877787807814457e-17
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "queue_threshold": {
+          "total_reward": {
+            "mean": -2074.7,
+            "std": 0.0
+          },
+          "average_queue_length": {
+            "mean": 9.994499999999999,
+            "std": 0.0
+          },
+          "maximum_queue_length": {
+            "mean": 28.2,
+            "std": 0.0
+          },
+          "throughput_per_step": {
+            "mean": 3.1787499999999995,
+            "std": 4.440892098500626e-16
+          },
+          "total_departed": {
+            "mean": 635.75,
+            "std": 0.0
+          },
+          "average_wait_time_steps": {
+            "mean": 3.1089741788997194,
+            "std": 4.440892098500626e-16
+          },
+          "average_wait_time_seconds": {
+            "mean": 9.326922536699156,
+            "std": 0.0
+          },
+          "switch_count": {
+            "mean": 37.9,
+            "std": 0.0
+          },
+          "switch_requested_count": {
+            "mean": 37.9,
+            "std": 0.0
+          },
+          "switch_applied_count": {
+            "mean": 37.9,
+            "std": 0.0
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.1895,
+            "std": 0.0
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.1895,
+            "std": 0.0
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "max_pressure": {
+          "total_reward": {
+            "mean": -2032.5,
+            "std": 0.0
+          },
+          "average_queue_length": {
+            "mean": 9.5395,
+            "std": 0.0
+          },
+          "maximum_queue_length": {
+            "mean": 28.5,
+            "std": 0.0
+          },
+          "throughput_per_step": {
+            "mean": 3.177750000000001,
+            "std": 4.440892098500626e-16
+          },
+          "total_departed": {
+            "mean": 635.55,
+            "std": 0.0
+          },
+          "average_wait_time_steps": {
+            "mean": 2.967091015657202,
+            "std": 0.0
+          },
+          "average_wait_time_seconds": {
+            "mean": 8.901273046971607,
+            "std": 0.0
+          },
+          "switch_count": {
+            "mean": 62.29999999999999,
+            "std": 7.105427357601002e-15
+          },
+          "switch_requested_count": {
+            "mean": 62.29999999999999,
+            "std": 7.105427357601002e-15
+          },
+          "switch_applied_count": {
+            "mean": 62.29999999999999,
+            "std": 7.105427357601002e-15
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.3115,
+            "std": 0.0
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.3115,
+            "std": 0.0
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "dqn": {
+          "total_reward": {
+            "mean": -1894.4333333333334,
+            "std": 11.709065813386722
+          },
+          "average_queue_length": {
+            "mean": 8.925666666666668,
+            "std": 0.05865909041989125
+          },
+          "maximum_queue_length": {
+            "mean": 25.26666666666667,
+            "std": 0.4714045207910317
+          },
+          "throughput_per_step": {
+            "mean": 3.1779999999999995,
+            "std": 0.0022453655975510902
+          },
+          "total_departed": {
+            "mean": 635.6,
+            "std": 0.44907311951025863
+          },
+          "average_wait_time_steps": {
+            "mean": 2.7740738368154676,
+            "std": 0.018811550739380692
+          },
+          "average_wait_time_seconds": {
+            "mean": 8.322221510446402,
+            "std": 0.05643465221814147
+          },
+          "switch_count": {
+            "mean": 54.650000000000006,
+            "std": 0.16329931618554464
+          },
+          "switch_requested_count": {
+            "mean": 54.650000000000006,
+            "std": 0.16329931618554464
+          },
+          "switch_applied_count": {
+            "mean": 54.650000000000006,
+            "std": 0.16329931618554464
+          },
+          "invalid_switch_count": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "switch_frequency_per_step": {
+            "mean": 0.27325,
+            "std": 0.0008164965809277268
+          },
+          "switch_request_frequency_per_step": {
+            "mean": 0.27325,
+            "std": 0.0008164965809277268
+          },
+          "invalid_action_frequency_per_step": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        }
+      }
+    },
+    "final_training_episode": {
+      "total_reward": {
+        "mean": -1889.0,
+        "std": 50.52392172690741
+      },
+      "average_queue_length": {
+        "mean": 8.901666666666666,
+        "std": 0.25187077815595993
+      },
+      "maximum_queue_length": {
+        "mean": 18.0,
+        "std": 0.0
+      },
+      "throughput_per_step": {
+        "mean": 3.1999999999999997,
+        "std": 0.06683312551921149
+      },
+      "total_departed": {
+        "mean": 640.0,
+        "std": 13.366625103842281
+      },
+      "average_wait_time_steps": {
+        "mean": 2.7482845918428858,
+        "std": 0.05741963600467637
+      },
+      "average_wait_time_seconds": {
+        "mean": 8.244853775528657,
+        "std": 0.17225890801402946
+      },
+      "switch_count": {
+        "mean": 54.333333333333336,
+        "std": 0.4714045207910317
+      },
+      "switch_requested_count": {
+        "mean": 54.333333333333336,
+        "std": 0.4714045207910317
+      },
+      "switch_applied_count": {
+        "mean": 54.333333333333336,
+        "std": 0.4714045207910317
+      },
+      "invalid_switch_count": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "episode": {
+        "mean": 249.0,
+        "std": 0.0
+      },
+      "epsilon": {
+        "mean": 0.05000000000000001,
+        "std": 6.938893903907228e-18
+      },
+      "mean_loss": {
+        "mean": 76.6457373491923,
+        "std": 7.074541945786252
+      },
+      "switch_frequency_per_step": {
+        "mean": 0.27166666666666667,
+        "std": 0.0023570226039551605
+      },
+      "switch_request_frequency_per_step": {
+        "mean": 0.27166666666666667,
+        "std": 0.0023570226039551605
+      },
+      "invalid_action_frequency_per_step": {
+        "mean": 0.0,
+        "std": 0.0
+      }
+    }
+  }
+}

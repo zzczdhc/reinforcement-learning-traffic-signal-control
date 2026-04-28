@@ -1,0 +1,6 @@
+regime,first_variant,second_variant,first_wait,second_wait,wait_improvement_pct,first_queue,second_queue,queue_improvement_pct
+symmetric_low,Original Double DQN,Tuned Double DQN,7.426131,7.287255,1.8701,4.90575,4.820417,1.7395
+symmetric_high,Original Double DQN,Tuned Double DQN,10.032701,9.976451,0.5607,15.785333,15.694417,0.576
+asymmetric,Original Double DQN,Tuned Double DQN,8.106552,8.063465,0.5315,10.122583,10.086,0.3614
+nonstationary,Original Double DQN,Tuned Double DQN,8.362088,8.226043,1.6269,7.97825,7.85775,1.5104
+burst_east_west,Original Double DQN,Tuned Double DQN,8.322222,8.247377,0.8993,8.925667,8.84225,0.9346

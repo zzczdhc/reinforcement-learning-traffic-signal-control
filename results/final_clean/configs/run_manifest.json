@@ -1,0 +1,49 @@
+{
+  "created_at_utc": "2026-04-28T00:43:51.389291+00:00",
+  "config": "configs/default.yaml",
+  "seeds": [
+    7,
+    17,
+    27
+  ],
+  "final_results_root": "results/final_clean",
+  "runs": {
+    "baselines": "results/final_clean/baselines/baseline_summary.json",
+    "final_double_dqn": "results/final_clean/final_double_dqn/dqn_multiseed_summary.json",
+    "original_double_dqn": "results/final_clean/original_double_dqn/dqn_multiseed_summary.json",
+    "ablations": "results/final_clean/ablations/ablation_summary.json",
+    "grid_2x2_baselines": "results/final_clean/grid_2x2/baselines/baseline_summary.json",
+    "grid_2x2_double_dqn": "results/final_clean/grid_2x2/dqn_multiseed_summary.json"
+  },
+  "grid_2x2_extension": {
+    "config": "configs/grid_2x2.yaml",
+    "seeds": [
+      7,
+      17,
+      27
+    ],
+    "algorithm": "Double DQN",
+    "use_action_mask": true,
+    "figures": [
+      "results/final_clean/figures/fig08_2x2_wait_rl_vs_baselines.png",
+      "results/final_clean/figures/fig09_2x2_queue_rl_vs_baselines.png"
+    ]
+  },
+  "original_double_dqn_overrides": {
+    "environment.switch_penalty": 2.0,
+    "training.gamma": 0.99,
+    "training.learning_rate": 0.001,
+    "training.batch_size": 64,
+    "training.end_epsilon": 0.05,
+    "training.epsilon_decay_steps": 20000,
+    "training.warmup_steps": 500,
+    "training.target_sync_steps": 250,
+    "training.gradient_clip_norm": null
+  },
+  "ablation_config": "configs/ablations.yaml",
+  "copied_configs": {
+    "default_final": "results/final_clean/configs/default_final.yaml",
+    "ablations_final": "results/final_clean/configs/ablations_final.yaml",
+    "grid_2x2_final": "results/final_clean/configs/grid_2x2_final.yaml"
+  }
+}
