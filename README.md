@@ -1,6 +1,6 @@
 # Reinforcement Learning for Adaptive Traffic Signal Control
 
-This repository is a course-project starter for adaptive traffic signal control at single-intersection (`1x1`) and small grid (`2x2`) networks under stationary and nonstationary demand.
+This repository contains a course final project on adaptive traffic signal control at single-intersection (`1x1`) and small grid (`2x2`) networks under stationary and nonstationary demand.
 
 ## Status
 
@@ -15,14 +15,9 @@ Implemented now:
 - ablation runner for Double DQN and action masking studies
 - CLI config overrides for quick DQN experiments
 - lightweight hyperparameter search for both `1x1` and `2x2` setups
-- automatic figure generation for both single DQN runs and tuning results
+- automatic figure generation for DQN runs, ablations, tuning results, and the final clean report assets
 - JSON result outputs for baselines, DQN training/evaluation, and tuning
 - smoke tests for the environment and the main scripts
-
-Planned but not included yet:
-
-- finished analysis notebooks
-- checkpoint resume / experiment tracking polish
 
 ## Project Goal
 
@@ -35,7 +30,7 @@ Can an RL policy learn a better long-horizon controller than fixed-cycle and que
 ## Repository Layout
 
 ```text
-RL_traffic_Alex/
+reinforcement-learning-traffic-signal-control-final/
 ├── configs/
 │   ├── ablations.yaml
 │   ├── default.yaml
@@ -43,9 +38,13 @@ RL_traffic_Alex/
 ├── docs/
 │   └── proposal_draft.md
 ├── notebooks/
+│   ├── 01_project_overview.ipynb
+│   ├── 02_baseline_comparison.ipynb
+│   ├── 03_dqn_training_analysis.ipynb
 │   └── README.md
 ├── results/
 ├── scripts/
+│   ├── build_final_assets.py
 │   ├── plot_ablations.py
 │   ├── plot_results.py
 │   ├── run_ablations.py
@@ -55,6 +54,7 @@ RL_traffic_Alex/
 │   └── tune_dqn.py
 ├── src/
 │   └── traffic_rl/
+│       ├── baselines.py
 │       ├── config.py
 │       ├── dqn.py
 │       ├── env.py
@@ -145,10 +145,10 @@ python3 scripts/summarize_results.py results/dqn_summary.json
 ```
 
 The default `1x1` config uses the tuned non-architecture Double DQN setting from
-`results/best_nonarch_tuned_config.yaml`: `learning_rate=0.00025`,
-`batch_size=32`, `gamma=0.95`, `end_epsilon=0.08`,
-`epsilon_decay_steps=30000`, `warmup_steps=800`, `target_sync_steps=50`,
-`switch_penalty=2.5`, and `gradient_clip_norm=10.0`.
+`configs/default.yaml`: `learning_rate=0.00025`, `batch_size=32`,
+`gamma=0.95`, `end_epsilon=0.08`, `epsilon_decay_steps=30000`,
+`warmup_steps=800`, `target_sync_steps=50`, `switch_penalty=2.5`, and
+`gradient_clip_norm=10.0`.
 
 Run a multi-seed DQN experiment without replacing the single-seed summary:
 
@@ -221,7 +221,7 @@ model because it is simple and directly aligned with congestion reduction.
 - Use `tuning.fixed_overrides` to shorten each trial, then re-run the best config with full training episodes.
 - By default the `1x1` tuning objective is `dqn` performance on `nonstationary`; the `2x2` objective uses `grid_nonstationary`. Both minimize `average_wait_time_seconds`.
 
-Main tuning artifacts:
+When tuning is run, it writes artifacts such as:
 
 - `results/tuning/tuning_summary.json`
 - `results/tuning/1x1/tuning_summary.json`
@@ -229,6 +229,9 @@ Main tuning artifacts:
 - `results/tuning/best_config.yaml`
 - `results/plots/tuning/tuning_overview.png`
 - `results/plots/tuning/best_trial/*.png`
+
+These transient tuning folders are not part of the clean final submission. The
+submitted final statistics and figures live under `results/final_clean/`.
 
 ## Outputs
 
@@ -277,7 +280,6 @@ Older checkpoints from the previous 10D observation version are not compatible w
 - the `2x2` grid is still a lightweight synthetic simulator, not a calibrated road network
 - demand is synthetic rather than data-driven
 - there is no checkpoint resume path yet
-- notebooks are still placeholders
 - experiment tracking is minimal and file-based
 
 ## Recommended Next Steps
